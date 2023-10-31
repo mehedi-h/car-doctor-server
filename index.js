@@ -42,7 +42,7 @@ async function run() {
             const query = { _id: new ObjectId(id)};
 
             const options = {
-                projection: { title: 1, price: 1, service_id: 1 },
+                projection: { customerName: 1, price: 1, service_id: 1, img: 1, service: 1 },
             };
 
             const result = await serviceCollection.findOne(query, options);
@@ -51,6 +51,15 @@ async function run() {
         } )
 
         // Checkouts---------------------------------------------->
+        app.get('/checkouts', async(req, res) => {
+            let query = {};
+            if ( req.query?.email ) {
+                query = { email: req.query.email }
+            }
+            const result = await checkoutCollection.find(query).toArray();
+            res.send(result)
+        })
+
         app.post('/checkouts', async(req, res) => {
             const checkout = req.body;
             console.log(checkout);
