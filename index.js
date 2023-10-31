@@ -29,6 +29,8 @@ async function run() {
         // await client.connect();
 
         const serviceCollection = client.db('carDoctor').collection('services');
+        const checkoutCollection = client.db('carDoctor').collection('checkouts');
+
         app.get('/services', async(req, res) => {
             const cursor = serviceCollection.find();
             const result = await cursor.toArray();
@@ -47,6 +49,14 @@ async function run() {
             res.send(result)
 
         } )
+
+        // Checkouts---------------------------------------------->
+        app.post('/checkouts', async(req, res) => {
+            const checkout = req.body;
+            console.log(checkout);
+            const result = await checkoutCollection.insertOne(checkout);
+            res.send(result)
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
