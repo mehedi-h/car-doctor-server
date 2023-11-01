@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
@@ -31,6 +32,15 @@ async function run() {
         const serviceCollection = client.db('carDoctor').collection('services');
         const checkoutCollection = client.db('carDoctor').collection('checkouts');
 
+        // Auth Related Api------------------------------------------------->
+        app.post('/jwt', (req, res) => {
+            const user = req.body;
+            console.log(user);
+            const token = jwt.sign(user, 'secret', {expiresIn: '1hr'})
+            res.send(token)
+        })
+
+        // Services related api connection------------------------------------>
         app.get('/services', async(req, res) => {
             const cursor = serviceCollection.find();
             const result = await cursor.toArray();
@@ -50,7 +60,7 @@ async function run() {
 
         } )
 
-        // Checkouts---------------------------------------------->
+        // Checkouts Related Api---------------------------------------------->
         app.get('/checkouts', async(req, res) => {
             let query = {};
             if ( req.query?.email ) {
