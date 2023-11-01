@@ -42,7 +42,7 @@ async function run() {
             const query = { _id: new ObjectId(id)};
 
             const options = {
-                projection: { customerName: 1, price: 1, service_id: 1, img: 1, service: 1 },
+                projection: { customerName: 1, price: 1, service_id: 1, img: 1, title: 1 },
             };
 
             const result = await serviceCollection.findOne(query, options);
@@ -64,6 +64,27 @@ async function run() {
             const checkout = req.body;
             console.log(checkout);
             const result = await checkoutCollection.insertOne(checkout);
+            res.send(result)
+        })
+
+        app.patch('/checkouts/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id)}
+            const updatedBookings = req.body;
+            console.log(updatedBookings);
+            const updatedDoc = {
+                $set: {
+                    status: updatedBookings.status
+                },
+            }
+            const result = await checkoutCollection.updateOne(filter, updatedDoc)
+            res.send(result)
+        })
+
+        app.delete('/checkouts/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id)}
+            const result = await checkoutCollection.deleteOne(query);
             res.send(result)
         })
 
