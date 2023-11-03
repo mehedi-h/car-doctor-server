@@ -9,10 +9,15 @@
  *  2.  local storage ----> ok type (XSS- not safe)
  *  3.  cookies: http only cookies for development false (for https will true)
  * 
- *  3.2 cors 
+ *  3.2 cors setting
+ * ============== app.use(cors({
+                    origin: ['http://localhost:5173'],
+                    credentials: true
+                }));
  * 
  * 
  * 3.3  client site axios set up
+ * with creadintials true
  * 
  * 
  */
